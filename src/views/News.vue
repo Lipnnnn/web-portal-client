@@ -19,12 +19,83 @@
                 </el-col>
             </el-row>
         </div>
+        <div class="tabs">
+            <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+                <el-tab-pane label="最新动态" name="1">
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-card class="tabs-card" shadow="hover" v-for="item in news1">
+                                <div class="tabs-image" :style="{backgroundImage: `url(http://localhost:3333${item.cover})`}">
+                                    <h3>{{ item.title }}</h3>
+                                    <p>{{ formatDate(item.editTime) }}</p>
+                                </div>
+                            </el-card>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-timeline style="max-width: 600px">
+                                <el-timeline-item
+                                v-for="item in news1"
+                                :timestamp="formatDate(item.editTime)"
+                                >
+                                {{ item.title }}
+                                </el-timeline-item>
+                            </el-timeline>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane label="典型案例" name="2">
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-card class="tabs-card" shadow="hover" v-for="item in news2">
+                                <div class="tabs-image" :style="{backgroundImage: `url(http://localhost:3333${item.cover})`}">
+                                    <h3>{{ item.title }}</h3>
+                                    <p>{{ formatDate(item.editTime) }}</p>
+                                </div>
+                            </el-card>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-timeline style="max-width: 600px">
+                                <el-timeline-item
+                                v-for="item in news2"
+                                :timestamp="formatDate(item.editTime)"
+                                >
+                                {{ item.title }}
+                                </el-timeline-item>
+                            </el-timeline>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane label="通知公告" name="3">
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-card class="tabs-card" shadow="hover" v-for="item in news3">
+                                <div class="tabs-image" :style="{backgroundImage: `url(http://localhost:3333${item.cover})`}">
+                                    <h3>{{ item.title }}</h3>
+                                    <p>{{ formatDate(item.editTime) }}</p>
+                                </div>
+                            </el-card>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-timeline style="max-width: 600px">
+                                <el-timeline-item
+                                v-for="item in news3"
+                                :timestamp="formatDate(item.editTime)"
+                                >
+                                {{ item.title }}
+                                </el-timeline-item>
+                            </el-timeline>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
     </div>
 </template>
 
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 const query = ref("");
 const newsList = ref([]);
@@ -36,7 +107,28 @@ watch(query,()=>{
 
 onMounted(()=>{
     getNewsList();
+    getNewsByCategory(1);
+    getNewsByCategory(2);
+    getNewsByCategory(3);
 })
+
+// 不同分类的新闻数据
+const news1 = ref([]);
+const news2 = ref([]);
+const news3 = ref([]);
+// 根据分类获取新闻列表
+const getNewsByCategory = async(category)=>{
+    const res = await axios.get(`/webapi/news/list/${category}`);
+    if(category == 1){
+        news1.value = res.data.data;
+    }
+    if(category == 2){
+        news2.value = res.data.data;
+    }
+    if(category == 3){
+        news3.value = res.data.data;
+    }
+}
 
 // 获取所有新闻
 const getNewsList = async()=>{
@@ -61,7 +153,16 @@ const handleBlur = ()=>{
 // 新闻列表展示，只展示前4条数据
 const showNews = computed(()=>{
     return newsList.value.slice(0,4);
-})
+});
+
+// 选项卡部分：
+const activeName = ref("1");
+
+// 格式化日期的函数
+const formatDate = (time)=>{
+    return format(time,'yyyy年MM月dd日 HH:mm');
+}
+
 
 </script>
 
@@ -120,5 +221,20 @@ const showNews = computed(()=>{
 .list{
     margin: 20px;
 }
+
+.tabs{
+    margin: 20px;
+    margin-top: 50px;
+}
+
+.tabs-card{
+    margin-bottom: 20px;
+}
+.tabs-image{
+    background-size: 100px,500px;
+    background-repeat: no-repeat;
+    padding-left: 120px;
+}
+
 
 </style>
