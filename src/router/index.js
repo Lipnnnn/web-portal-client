@@ -26,7 +26,7 @@ const router = createRouter({
       component: () => import('../views/Product.vue')
     },
     {
-      path: '/newsdetail',
+      path: '/newsdetail/:id',
       name: 'newsdetail',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

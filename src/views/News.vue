@@ -1,18 +1,18 @@
 <template>
     <div class="news">
         <div class="search">
-            <input type="text" class="input" v-model="query" @blur="handleBlur" placeholder="请输入新闻标题关键字">
+            <input type="text" class="input" v-model="query" placeholder="请输入新闻标题关键字">
             <div class="show" v-show="isShow">
                 <h3>搜索结果：</h3>
                 <ul>
-                    <li v-for="item in queryList"><a href="">{{ item.title }}</a></li>
+                    <li v-for="item in queryList" @click="handleToDetail(item._id)"><a href="">{{ item.title }}</a></li>
                 </ul>
             </div>
         </div>
         <div class="list">
             <el-row :gutter="20">
                 <el-col v-for="item in showNews" :span="6">
-                    <el-card style="max-width: 480px" shadow="hover">
+                    <el-card style="max-width: 480px" shadow="hover" @click="handleToDetail(item._id)">
                         <template #header>{{item.title}}</template>
                         <div class="image" :style="{backgroundImage: `url(http://localhost:3333${item.cover})`}"></div>
                     </el-card>
@@ -24,7 +24,7 @@
                 <el-tab-pane label="最新动态" name="1">
                     <el-row :gutter="20">
                         <el-col :span="18">
-                            <el-card class="tabs-card" shadow="hover" v-for="item in news1">
+                            <el-card class="tabs-card" shadow="hover" v-for="item in news1" @click="handleToDetail(item._id)">
                                 <div class="tabs-image" :style="{backgroundImage: `url(http://localhost:3333${item.cover})`}">
                                     <h3>{{ item.title }}</h3>
                                     <p>{{ formatDate(item.editTime) }}</p>
@@ -46,7 +46,7 @@
                 <el-tab-pane label="典型案例" name="2">
                     <el-row :gutter="20">
                         <el-col :span="18">
-                            <el-card class="tabs-card" shadow="hover" v-for="item in news2">
+                            <el-card class="tabs-card" shadow="hover" v-for="item in news2" @click="handleToDetail(item._id)">
                                 <div class="tabs-image" :style="{backgroundImage: `url(http://localhost:3333${item.cover})`}">
                                     <h3>{{ item.title }}</h3>
                                     <p>{{ formatDate(item.editTime) }}</p>
@@ -68,7 +68,7 @@
                 <el-tab-pane label="通知公告" name="3">
                     <el-row :gutter="20">
                         <el-col :span="18">
-                            <el-card class="tabs-card" shadow="hover" v-for="item in news3">
+                            <el-card class="tabs-card" shadow="hover" v-for="item in news3" @click="handleToDetail(item._id)">
                                 <div class="tabs-image" :style="{backgroundImage: `url(http://localhost:3333${item.cover})`}">
                                     <h3>{{ item.title }}</h3>
                                     <p>{{ formatDate(item.editTime) }}</p>
@@ -96,6 +96,8 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const query = ref("");
 const newsList = ref([]);
@@ -161,6 +163,11 @@ const activeName = ref("1");
 // 格式化日期的函数
 const formatDate = (time)=>{
     return format(time,'yyyy年MM月dd日 HH:mm');
+}
+
+// 跳转到新闻详情页面
+const handleToDetail = (id)=>{
+    router.push(`/newsdetail/${id}`);
 }
 
 
