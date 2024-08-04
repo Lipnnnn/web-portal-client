@@ -1,29 +1,28 @@
-# web
+# Lipn公司门户网站
 
-This template should help get you started developing with Vue 3 in Vite.
+### 1. 项目介绍：
+基于Vue3 + Vue-Router + Vuex + Element-plus 实现前端页面的展示，使用Axios库实现数据请求，对数据的增删改查操作在“Lipn门户网站管理系统”项目中进行，本项目只需从后台获取到数据库中的数据进行展示。
 
-## Recommended IDE Setup
+### 2. 项目主要功能：
+① 新闻中心-对公司的新闻进行展示与搜索
+</br>
+② 新闻分为三类，分别是最新动态、典型案例、通知公告
+</br>
+③ 展示公司的产品与服务
+</br>
+④ 登录到后台管理系统
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### 3. 项目部分页面截图：
+① 新闻中心
+![alt text](image-1.png)
 
-## Customize configuration
+② 产品与服务
+![alt text](image-2.png)
+![alt text](image-3.png)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+### 4. 完成此项目能学习到：
+① 学会封装Promise异步请求后台数据；
+</br>
+② 巩固element-plus组件的使用；
+</br>
+③ 学习到多种CSS样式的编写；

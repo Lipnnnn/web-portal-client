@@ -1,11 +1,11 @@
 <template>
     <div class="box">
-        <h2>{{ currentNews.title }}</h2>
-        <p>{{ currentNews.editTime }}</p>
+        <h2>{{ currentNews?currentNews.title:'' }}</h2>
+        <p>{{ currentNews?formatTime(currentNews.editTime):'' }}</p>
         <el-divider>
             <el-icon><star-filled /></el-icon>
         </el-divider>
-        <div v-html="currentNews.content"></div>
+        <div style="width: calc(100% - 370px)" v-html="currentNews?currentNews.content:''"></div>
         <el-card style="width: 300px" class="card">
             <template #header>
             <div class="card-header">
@@ -31,7 +31,7 @@ import { useRouter,useRoute } from 'vue-router';
 const router = useRouter();
 const route = useRoute();
 
-const currentNews = reactive({});
+const currentNews = ref();  
 const latestNews = ref([]);
 const limit = ref(4);
 
@@ -39,25 +39,29 @@ const limit = ref(4);
 watchEffect(async()=>{
     let currentId = route.params.id;
     const res = await axios.get(`/webapi/news/getNewsById/${currentId}`);
-    Object.assign(currentNews,res.data.data);
+    currentNews.value = res.data.data;
     const res2 = await axios.get(`/webapi/news/getNewsLimit/${limit.value}`);
     latestNews.value = res2.data.data;
 })
+
+const formatTime = (time)=>{
+    return format(time,'yyyy年MM月dd日');
+}
 
 // onMounted钩子，只有在组件构建的时候才会执行，更新的时候不执行
 // onMounted(async()=>{
 //     let currentId = route.params.id;
 //     const res = await axios.get(`/webapi/news/getNewsById/${currentId}`);
-//     Object.assign(currentNews,res.data.data);
+//     currentNews.value = res.data.data;
 //     const res2 = await axios.get(`/webapi/news/getNewsLimit/${limit.value}`);
 //     latestNews.value = res2.data.data;
 // })
 
-// onUpdated钩子，只有在组件更新的时候才会执行，
+// onUpdated钩子，只有在组件更新的时候才会执行
 // onUpdated(async()=>{
 //     let currentId = route.params.id;
 //     const res = await axios.get(`/webapi/news/getNewsById/${currentId}`);
-//     Object.assign(currentNews,res.data.data);
+//     currentNews.value = res.data.data;
 //     const res2 = await axios.get(`/webapi/news/getNewsLimit/${limit.value}`);
 //     latestNews.value = res2.data.data;
 // })

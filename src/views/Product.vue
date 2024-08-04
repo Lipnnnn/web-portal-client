@@ -4,10 +4,21 @@
             height="calc(100vh - 60px)"
             direction="vertical"
             motion-blur
-            :autoplay="false"
+            :autoplay="true"
         >
-            <el-carousel-item v-for="item in 4" :key="item">
-            <h3 text="2xl" justify="center">{{ item }}</h3>
+            <el-carousel-item v-for="item in productList" :key="item._id">
+                <div class="item" :style="{backgroundImage: `url(http://localhost:3333${item.image})`}">
+                    <el-card>
+                        <template #header>
+                        <div class="item.name">
+                            <h2>{{item.name}}</h2>
+                        </div>
+                        </template>
+                        <p style="margin-bottom: 40px;">简介：{{ item.introduction }}</p>
+                        <p style="margin-bottom: 80px; line-height: 2; text-indent: 2em;">{{ item.detail }}</p>
+                        <p>了解更多，请加微信：Lipn552576</p>
+                    </el-card>
+                </div>
             </el-carousel-item>
         </el-carousel>
     </div>
@@ -16,15 +27,15 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
-const product = ref([]);
+const productList = ref([]);
 
 onMounted(()=>{
     getProduct();
 })
 
 const getProduct = async()=>{
-    const res = await axios.get('/webapi/product/getProduct');
-    console.log(res);
+    const res = await axios.get('/webapi/product/list');
+    productList.value = res.data.data;
 }
 
 </script>
@@ -33,24 +44,15 @@ const getProduct = async()=>{
 .box{
     margin-top: 60px;
 }
-
-.demonstration {
-  color: var(--el-text-color-secondary);
+.item{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+.el-card{
+    width: 50%;
+    height: 100%;
+    background-color: rgba(255,255,255,.7);
 }
 
-.el-carousel__item h3 {
-  color: #475669;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-  text-align: center;
-}
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
-}
 </style>
